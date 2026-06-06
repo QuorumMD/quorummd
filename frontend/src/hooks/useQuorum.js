@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { analyzeCase } from '../services/api'
+import { startDeliberation, stopDeliberation, playVerdict } from '../utils/sounds'
 
 export const useQuorum = () => {
   const [verdict, setVerdict] = useState(null)
@@ -10,10 +11,14 @@ export const useQuorum = () => {
     setLoading(true)
     setError(null)
     setVerdict(null)
+    startDeliberation()
     try {
       const result = await analyzeCase(caseData)
+      stopDeliberation()
+      playVerdict()
       setVerdict(result)
     } catch (err) {
+      stopDeliberation()
       setError(err.response?.data?.detail || 'Something went wrong. Please try again.')
     } finally {
       setLoading(false)

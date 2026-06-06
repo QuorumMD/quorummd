@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './CaseInput.css'
+import { playSubmit } from '../utils/sounds'
 
 const CaseInput = ({ onSubmit, loading }) => {
   const [form, setForm] = useState({
@@ -15,6 +16,7 @@ const CaseInput = ({ onSubmit, loading }) => {
 
   const handleSubmit = () => {
     if (!form.case_description.trim()) return
+    playSubmit()
     onSubmit({
       ...form,
       patient_age: form.patient_age ? parseInt(form.patient_age) : null
