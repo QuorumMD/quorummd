@@ -1,9 +1,8 @@
+import './styles/global.css'
+import Dashboard from './pages/Dashboard'
+
 function App() {
-  return (
-    <div>
-      <h1>QuorumMD</h1>
-    </div>
-  )
+  return <Dashboard />
 }
 
 export default App
