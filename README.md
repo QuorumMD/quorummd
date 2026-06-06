@@ -12,8 +12,8 @@ QuorumMD convenes a board meeting of specialized AI agents the moment a physicia
 
 | Name | Role | Stack |
 |---|---|---|
-| Ediale | Lead · Frontend · Infra | React · Firebase · AWS |
-| Hersh Doshi | ML & RAG Pipeline | FastAPI · HuggingFace · Pinecone · Groq |
+| Ediale | Lead · Frontend · Infra | React · Firebase · Azure |
+| Hersh Doshi | ML & RAG Pipeline | FastAPI · HuggingFace · Pinecone · Azure OpenAI |
 | Aman Bollam | Evals & Product | OpenAI API · Full-Stack · Supabase |
 | Ranita Rajkumar | Mobile & UX | Swift · Azure · Java · Spring Boot |
 
@@ -25,19 +25,20 @@ QuorumMD convenes a board meeting of specialized AI agents the moment a physicia
 quorummd/
 ├── backend/                  # FastAPI — Hersh
 │   ├── app/
-│   │   ├── agents/           # Specialized AI agents (one per clinical domain)
+│   │   ├── agents/           # Specialist AI agents (one per clinical domain)
 │   │   ├── api/              # Route handlers
-│   │   ├── core/             # Config, DB connections, shared utils
-│   │   └── models/           # Pydantic models / schemas
+│   │   ├── core/             # Orchestrator, config, shared utils
+│   │   └── models/           # Pydantic schemas
 │   ├── tests/
 │   ├── requirements.txt
 │   └── .env.example
 ├── frontend/                 # React — Ediale
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── hooks/
-│   └── public/
+│   │   ├── components/       # CaseInput, VerdictPanel
+│   │   ├── pages/            # Dashboard
+│   │   ├── hooks/            # useQuorum
+│   │   └── services/         # API layer
+│   └── index.html
 └── docs/                     # PRD, architecture diagrams, research
 ```
 
@@ -45,12 +46,12 @@ quorummd/
 
 ## Stack
 
-- **Inference** — Groq
+- **Inference** — Azure OpenAI (GPT-4o)
 - **Vector DB** — Pinecone
 - **RAG API** — FastAPI
-- **Backend** — Firebase
+- **Backend** — Firebase · Azure
 - **Models** — HuggingFace Medical
-- **Frontend** — React / Vue
+- **Frontend** — React
 
 ---
 
@@ -60,7 +61,7 @@ quorummd/
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env
 uvicorn app.main:app --reload
@@ -80,7 +81,9 @@ npm run dev
 Copy `backend/.env.example` to `backend/.env` and fill in your keys. **Never commit `.env` to the repo.**
 
 ```
-GROQ_API_KEY=
+AZURE_OPENAI_API_KEY=
+AZURE_OPENAI_ENDPOINT=
+AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
 PINECONE_API_KEY=
 PINECONE_ENV=
 FIREBASE_PROJECT_ID=
