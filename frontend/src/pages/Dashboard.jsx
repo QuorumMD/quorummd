@@ -1,3 +1,4 @@
+import React from 'react'
 import { useQuorum } from '../hooks/useQuorum'
 import CaseInput from '../components/CaseInput'
 import VerdictPanel from '../components/VerdictPanel'
