@@ -1,3 +1,4 @@
+import React from 'react'
 import './VerdictPanel.css'
 
 const AgentCard = ({ verdict }) => (
