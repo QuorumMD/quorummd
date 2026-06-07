@@ -46,7 +46,7 @@ quorummd/
 
 ## Stack
 
-- **Inference** — Azure OpenAI (GPT-4o)
+- **Inference** — Qwen (open weight)
 - **Vector DB** — Pinecone
 - **RAG API** — FastAPI
 - **Backend** — Firebase · Azure
@@ -81,9 +81,7 @@ npm run dev
 Copy `backend/.env.example` to `backend/.env` and fill in your keys. **Never commit `.env` to the repo.**
 
 ```
-AZURE_OPENAI_API_KEY=
-AZURE_OPENAI_ENDPOINT=
-AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
+QWEN_MODEL_PATH=
 PINECONE_API_KEY=
 PINECONE_ENV=
 FIREBASE_PROJECT_ID=
