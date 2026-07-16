@@ -13,7 +13,7 @@ app.include_router(router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # tighten to Firebase URL before the actual pitch
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
