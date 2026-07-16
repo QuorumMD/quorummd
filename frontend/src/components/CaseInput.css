@@ -70,7 +70,7 @@
   font-size: 13px;
   padding: 10px 14px;
   outline: none;
-  transition: border-color var(--transition);
+  transition: border-color var(--transition), box-shadow var(--transition);
   resize: vertical;
   width: 100%;
 }
@@ -79,6 +79,7 @@
 .case-input__field input:focus,
 .case-input__field select:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 200, 160, 0.12);
 }
 
 .case-input__field textarea::placeholder,
@@ -107,11 +108,20 @@
   letter-spacing: 0.12em;
   padding: 14px;
   cursor: pointer;
-  transition: opacity var(--transition);
+  transition: opacity var(--transition), transform 0.15s ease, box-shadow 0.15s ease;
   margin-top: 0.5rem;
 }
 
-.case-input__submit:hover:not(:disabled) { opacity: 0.85; }
+.case-input__submit:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 200, 160, 0.25);
+}
+
+.case-input__submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 .case-input__submit:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .case-input__loading {

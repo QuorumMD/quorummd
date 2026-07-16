@@ -12,7 +12,8 @@ class CaseInput(BaseModel):
 class AgentVerdict(BaseModel):
     agent_name: str
     specialty: str
-    reasoning: str
+    finding: str
+    sources: list[str] = []
     confidence: float
 
 
@@ -22,3 +23,7 @@ class QuorumVerdict(BaseModel):
     agent_verdicts: list[AgentVerdict]
     confidence_score: float
     recommended_actions: list[str]
+    disclaimer: str = (
+        "QuorumMD is a clinical decision support tool. All outputs must be "
+        "verified by a licensed medical professional."
+    )
