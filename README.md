@@ -20,14 +20,12 @@ QuorumMD convenes a board meeting of specialized AI agents the moment a physicia
 ---
 
 ## Repo Structure
-
-```
 quorummd/
 ├── backend/                  # FastAPI — Hersh
 │   ├── app/
 │   │   ├── agents/           # Specialist AI agents (one per clinical domain)
-│   │   ├── api/              # Route handlers
-│   │   ├── core/             # Orchestrator, config, shared utils
+│   │   ├── api/               # Route handlers
+│   │   ├── core/               # Orchestrator, config, shared utils
 │   │   └── models/           # Pydantic schemas
 │   ├── tests/
 │   ├── requirements.txt
@@ -40,17 +38,16 @@ quorummd/
 │   │   └── services/         # API layer
 │   └── index.html
 └── docs/                     # PRD, architecture diagrams, research
-```
 
 ---
 
 ## Stack
 
-- **Inference** — Qwen (open weight)
+- **Inference** — Groq (Llama 3.3 70B) — switched from HuggingFace Inference Providers due to latency and free-tier credit limits
 - **Vector DB** — Pinecone
 - **RAG API** — FastAPI
 - **Backend** — Firebase · Azure
-- **Models** — HuggingFace Medical
+- **Models** — HuggingFace Medical (RAG/embeddings only, not primary inference)
 - **Frontend** — React
 
 ---
@@ -58,16 +55,30 @@ quorummd/
 ## Getting Started
 
 ### Backend
+
+**macOS / Linux (bash)**
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
+**Windows (PowerShell)**
+```powershell
+cd backend
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+Copy-Item .env.example .env
+uvicorn app.main:app --reload
+```
+
 ### Frontend
+
+**bash / PowerShell (same commands)**
 ```bash
 cd frontend
 npm install
@@ -81,7 +92,7 @@ npm run dev
 Copy `backend/.env.example` to `backend/.env` and fill in your keys. **Never commit `.env` to the repo.**
 
 ```
-QWEN_MODEL_PATH=
+GROQ_API_KEY=
 PINECONE_API_KEY=
 PINECONE_ENV=
 FIREBASE_PROJECT_ID=
