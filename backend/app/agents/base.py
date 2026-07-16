@@ -35,12 +35,11 @@ class SpecialistAgent:
             "back. Do not give a final diagnosis or verdict -- flag the most clinically "
             "significant considerations, risks, and differentials relevant to your specialty only.\n"
             "Format each bullet exactly like this: **Label:** one short sentence.\n"
-            "After the bullets, on its own final line, write your confidence in this specific "
-            "assessment as CONFIDENCE: <integer 0-100>. Base it on how strongly the case "
-            "presentation implicates your specialty specifically -- a case with no relevance to "
-            "your specialty should score low, a case squarely in your specialty's domain should "
-            "score high. Do not default to a round number like 50, 70, 75, 80, or 90 -- give your "
-            "actual best estimate.",
+            "After the bullets, on its own final line, first write one short clause (max 12 "
+            "words) naming the single strongest reason this case does or doesn't sit squarely "
+            "in your specialty, then immediately follow it with CONFIDENCE: <integer 0-100>. "
+            "The integer must NOT be a multiple of 5 (so not 50, 70, 75, 80, 90, etc.) -- pick "
+            "the precise number your reasoning actually supports, e.g. 34, 61, 88, 12.",
             f"Case description: {case.case_description}",
         ]
         if case.patient_age is not None:
@@ -57,11 +56,11 @@ class SpecialistAgent:
 
             if _PROVIDER == "huggingface":
                 completion = await _hf_client.chat.completions.create(
-                    model=_HF_MODEL, messages=messages
+                    model=_HF_MODEL, messages=messages, temperature=0.8
                 )
             else:
                 completion = await _groq_client.chat.completions.create(
-                    model=_GROQ_MODEL, messages=messages
+                    model=_GROQ_MODEL, messages=messages, temperature=0.8
                 )
 
             raw = completion.choices[0].message.content
@@ -90,5 +89,6 @@ class SpecialistAgent:
             return raw.strip(), 0.5
 
         score = max(0, min(100, int(match.group(1))))
-        finding = raw[:match.start()].strip()
+        line_start = raw.rfind("\n", 0, match.start())
+        finding = raw[:line_start].strip() if line_start != -1 else raw[:match.start()].strip()
         return finding, round(score / 100, 2)
