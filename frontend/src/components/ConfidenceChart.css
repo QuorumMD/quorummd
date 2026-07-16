@@ -1,0 +1,54 @@
+.confidence-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 0;
+}
+
+.confidence-chart__row {
+  display: grid;
+  grid-template-columns: 130px 1fr 44px;
+  align-items: center;
+  gap: 12px;
+}
+
+.confidence-chart__label {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.confidence-chart__track {
+  height: 10px;
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.confidence-chart__fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent-blue);
+  border-radius: 6px;
+  animation: chartFill 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.confidence-chart__fill--leader {
+  background: var(--accent);
+}
+
+@keyframes chartFill {
+  from { width: 0%; }
+}
+
+.confidence-chart__value {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: right;
+  font-family: var(--font-mono);
+}
