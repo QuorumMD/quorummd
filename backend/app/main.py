@@ -13,7 +13,10 @@ app.include_router(router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://quorummd.web.app"],  # tighten to Firebase URL before the actual pitch
+    allow_origins=[
+        "http://localhost:5173",
+        "https://your-project.web.app",  # your actual Firebase URL
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
