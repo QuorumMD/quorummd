@@ -10,4 +10,11 @@ export const analyzeCase = async (caseData) => {
   return response.data
 }
 
+export const getAgentRoster = async () => {
+  const response = await api.get('/agents')
+  return response.data
+}
+
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 export default api

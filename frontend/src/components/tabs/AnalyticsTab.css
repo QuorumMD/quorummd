@@ -1,0 +1,99 @@
+.analytics-tab {
+  --chart-self-reported: #3987e5;
+  --chart-relevance: #199e70;
+  --chart-final: #d95926;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.analytics-tab__empty {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.analytics-tab__chart-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.analytics-tab__chart-title {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.analytics-tab__chart-subtitle {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 4px;
+  max-width: 46ch;
+}
+
+.analytics-tab__tooltip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: var(--font-mono);
+}
+
+.analytics-tab__tooltip-label {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.analytics-tab__tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.analytics-tab__tooltip-key {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.analytics-tab__tooltip-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.analytics-tab__tooltip-name {
+  color: var(--text-secondary);
+}
+
+.analytics-tab__legend {
+  display: flex;
+  gap: 16px;
+  padding: 4px 0 12px;
+  flex-wrap: wrap;
+}
+
+.analytics-tab__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.analytics-tab__legend-swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}

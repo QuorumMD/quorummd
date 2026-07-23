@@ -1,8 +1,56 @@
 .dashboard {
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0, 200, 160, 0.08), transparent);
+  overflow-x: hidden;
+}
+
+.dashboard::before,
+.dashboard::after {
+  content: '';
+  position: absolute;
+  width: 46vw;
+  height: 46vw;
+  max-width: 620px;
+  max-height: 620px;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+}
+
+.dashboard::before {
+  top: -12%;
+  left: -10%;
+  background: var(--accent);
+  animation: meshDrift1 22s ease-in-out infinite;
+}
+
+.dashboard::after {
+  top: 10%;
+  right: -14%;
+  background: var(--accent-blue);
+  animation: meshDrift2 26s ease-in-out infinite;
+}
+
+@keyframes meshDrift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4vw, 3vw) scale(1.1); }
+}
+
+@keyframes meshDrift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-3vw, 4vw) scale(1.08); }
+}
+
+.dashboard__header,
+.dashboard__main,
+.dashboard__footer {
+  position: relative;
+  z-index: 1;
 }
 
 .dashboard__header {
@@ -135,6 +183,25 @@
 .dashboard__error p {
   font-size: 13px;
   color: var(--text-primary);
+}
+
+.dashboard__error-retry {
+  align-self: flex-start;
+  margin-top: 4px;
+  background: transparent;
+  border: 1px solid var(--red);
+  border-radius: var(--radius);
+  color: var(--red);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dashboard__error-retry:hover {
+  background: var(--red-dim);
 }
 
 .dashboard__footer {
