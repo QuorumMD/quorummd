@@ -1,0 +1,92 @@
+.overview-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.overview-tab__synthesized {
+  background: var(--accent-dim);
+  border: 1px solid rgba(0, 200, 160, 0.2);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.overview-tab__syn-label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.overview-tab__syn-text {
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+.overview-tab__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.overview-tab__stat {
+  background: var(--bg-elevated);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.overview-tab__stat-value {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--accent);
+}
+
+.overview-tab__stat-label {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.overview-tab__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.overview-tab__actions-label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+.overview-tab__actions ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.overview-tab__actions li {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-primary);
+  padding-left: 16px;
+  position: relative;
+}
+
+.overview-tab__actions li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}

@@ -1,6 +1,11 @@
 from typing import Optional
 from pydantic import BaseModel, Field
 
+DISCLAIMER = (
+    "QuorumMD is a clinical decision support tool. All outputs must be "
+    "verified by a licensed medical professional."
+)
+
 
 class CaseInput(BaseModel):
     case_description: str = Field(..., min_length=1)
@@ -15,6 +20,14 @@ class AgentVerdict(BaseModel):
     finding: str
     sources: list[str] = []
     confidence: float
+    self_reported_confidence: float = 0.0
+    relevance_score: float = 0.0
+    elapsed_ms: int = 0
+
+
+class AgentMeta(BaseModel):
+    name: str
+    specialty: str
 
 
 class QuorumVerdict(BaseModel):
@@ -23,7 +36,5 @@ class QuorumVerdict(BaseModel):
     agent_verdicts: list[AgentVerdict]
     confidence_score: float
     recommended_actions: list[str]
-    disclaimer: str = (
-        "QuorumMD is a clinical decision support tool. All outputs must be "
-        "verified by a licensed medical professional."
-    )
+    total_elapsed_ms: int = 0
+    disclaimer: str = DISCLAIMER

@@ -1,10 +1,15 @@
+import asyncio
 import os
 import re
+import time
 
 from groq import AsyncGroq
 from openai import AsyncOpenAI
 
+from app.core.scoring import blend_confidence, relevance_score
 from app.models.schemas import CaseInput, AgentVerdict
+
+_PROVIDER_TIMEOUT_S = 8.0
 
 # Toggle between providers without touching code -- set in .env.
 # "groq"        -> fast, free-tier friendly, used for day-to-day dev
@@ -37,9 +42,9 @@ class SpecialistAgent:
             "Format each bullet exactly like this: **Label:** one short sentence.\n"
             "After the bullets, on its own final line, first write one short clause (max 12 "
             "words) naming the single strongest reason this case does or doesn't sit squarely "
-            "in your specialty, then immediately follow it with CONFIDENCE: <integer 0-100>. "
-            "The integer must NOT be a multiple of 5 (so not 50, 70, 75, 80, 90, etc.) -- pick "
-            "the precise number your reasoning actually supports, e.g. 34, 61, 88, 12.",
+            "in your specialty, then immediately follow it with CONFIDENCE: <integer 0-100>, "
+            "your genuine confidence in this assessment based on how strongly the case actually "
+            "implicates your specialty.",
             f"Case description: {case.case_description}",
         ]
         if case.patient_age is not None:
@@ -50,21 +55,35 @@ class SpecialistAgent:
             parts.append(f"Additional context: {case.additional_context}")
         return "\n".join(parts)
 
-    async def analyze(self, case: CaseInput) -> AgentVerdict:
+    async def analyze(self, case: CaseInput, start_time: float | None = None) -> AgentVerdict:
+        if start_time is None:
+            start_time = time.monotonic()
+
+        relevance = relevance_score(case, self.specialty)
+        self_reported = 0.0
+
         try:
             messages = [{"role": "user", "content": self._build_prompt(case)}]
 
             if _PROVIDER == "huggingface":
-                completion = await _hf_client.chat.completions.create(
+                call = _hf_client.chat.completions.create(
                     model=_HF_MODEL, messages=messages, temperature=0.8
                 )
             else:
-                completion = await _groq_client.chat.completions.create(
+                call = _groq_client.chat.completions.create(
                     model=_GROQ_MODEL, messages=messages, temperature=0.8
                 )
 
+            completion = await asyncio.wait_for(call, timeout=_PROVIDER_TIMEOUT_S)
             raw = completion.choices[0].message.content
-            finding, confidence = self._extract_confidence(raw)
+            finding, self_reported = self._extract_confidence(raw)
+            confidence = blend_confidence(self_reported, relevance)
+        except asyncio.TimeoutError:
+            finding = (
+                f"[timeout] {self.name} did not respond within "
+                f"{_PROVIDER_TIMEOUT_S:.0f}s."
+            )
+            confidence = 0.0
         except Exception as e:
             finding = f"[error] {self.name} could not complete analysis ({_PROVIDER}): {e}"
             confidence = 0.0
@@ -75,6 +94,9 @@ class SpecialistAgent:
             finding=finding,
             sources=[],
             confidence=confidence,
+            self_reported_confidence=self_reported,
+            relevance_score=relevance,
+            elapsed_ms=int((time.monotonic() - start_time) * 1000),
         )
 
     @staticmethod

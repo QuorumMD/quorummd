@@ -1,23 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './CaseInput.css'
 import { playSubmit } from '../utils/sounds'
-
-const LOADING_STAGES = [
-  'Convening quorum...',
-  'Agents reviewing case...',
-  'Cross-examining findings...',
-  'Synthesizing opinion...'
-]
-
-const useLoadingStage = (loading) => {
-  const [stage, setStage] = useState(0)
-  useEffect(() => {
-    if (!loading) { setStage(0); return }
-    const id = setInterval(() => setStage(s => (s + 1) % LOADING_STAGES.length), 3000)
-    return () => clearInterval(id)
-  }, [loading])
-  return LOADING_STAGES[stage]
-}
 
 const CaseInput = ({ onSubmit, loading }) => {
   const [form, setForm] = useState({
@@ -26,8 +9,6 @@ const CaseInput = ({ onSubmit, loading }) => {
     patient_sex: '',
     additional_context: ''
   })
-
-  const loadingText = useLoadingStage(loading)
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -107,7 +88,7 @@ const CaseInput = ({ onSubmit, loading }) => {
         {loading ? (
           <span className="case-input__loading">
             <span className="case-input__spinner" />
-            {loadingText.toUpperCase()}
+            CONVENING...
           </span>
         ) : (
           'CONVENE QUORUM'

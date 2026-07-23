@@ -1,11 +1,17 @@
 import React from 'react'
-import { useQuorum } from '../hooks/useQuorum'
+import { useAgentRoster } from '../hooks/useAgentRoster'
+import { useQuorumStream } from '../hooks/useQuorumStream'
 import CaseInput from '../components/CaseInput'
-import VerdictPanel from '../components/VerdictPanel'
+import DeliberationLive from '../components/DeliberationLive'
+import ResultsView from '../components/ResultsView'
 import './Dashboard.css'
 
 const Dashboard = () => {
-  const { verdict, loading, error, submitCase, reset } = useQuorum()
+  const { roster: appRoster } = useAgentRoster()
+  const quorum = useQuorumStream()
+
+  const liveRoster = quorum.roster.length ? quorum.roster : appRoster
+  const headerCount = liveRoster.length
 
   return (
     <div className="dashboard">
@@ -15,7 +21,9 @@ const Dashboard = () => {
           <span className="dashboard__logo-tag">CLINICAL AI</span>
         </div>
         <div className="dashboard__header-right">
-          <span className="dashboard__header-stat">4 AGENTS ACTIVE</span>
+          <span className="dashboard__header-stat">
+            {headerCount > 0 ? `${headerCount} AGENTS ACTIVE` : 'CONNECTING...'}
+          </span>
         </div>
       </header>
 
@@ -29,18 +37,29 @@ const Dashboard = () => {
         </div>
 
         <div className="dashboard__content">
-          {!verdict ? (
-            <>
-              <CaseInput onSubmit={submitCase} loading={loading} />
-              {error && (
-                <div className="dashboard__error">
-                  <span>ERROR</span>
-                  <p>{error}</p>
-                </div>
-              )}
-            </>
-          ) : (
-            <VerdictPanel verdict={verdict} onReset={reset} />
+          {quorum.phase === 'idle' && (
+            <CaseInput onSubmit={quorum.submitCase} loading={false} />
+          )}
+
+          {quorum.phase === 'streaming' && (
+            <DeliberationLive
+              roster={liveRoster}
+              agentVerdicts={quorum.agentVerdicts}
+              synthesis={quorum.synthesis}
+              phase={quorum.phase}
+            />
+          )}
+
+          {quorum.phase === 'error' && (
+            <div className="dashboard__error">
+              <span>ERROR</span>
+              <p>{quorum.error}</p>
+              <button className="dashboard__error-retry" onClick={quorum.reset}>TRY AGAIN</button>
+            </div>
+          )}
+
+          {quorum.phase === 'done' && (
+            <ResultsView verdict={quorum} onReset={quorum.reset} />
           )}
         </div>
       </main>

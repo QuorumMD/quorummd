@@ -15,7 +15,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://your-project.web.app",  # your actual Firebase URL
+        "https://quorummd.web.app",
+        "https://quorummd.firebaseapp.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
